@@ -10,7 +10,7 @@ class Reversii extends AbstractMultiplayer implements IMultiplayer{
 		this.setGameName("Reversii");
 		int[] boardSize = new int[2];
 		boardSize[0] = 8;	boardSize[1] = 8;
-		this.setGameConfiguration(boardSize,2);
+		this.setGameConfiguration(boardSize,2,50);
 	}
 	
 	/**

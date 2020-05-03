@@ -9,7 +9,7 @@
       <GridPane fx:id="gameBoard" gridLinesVisible="true" layoutX="75.0" layoutY="75.0" prefHeight="400.0" prefWidth="400.0">
 	<!-- TODO Add Nodes -->
 </GridPane>
-      <Button fx:id="endGameBtn" layoutX="246.0" layoutY="500.0" mnemonicParsing="false" text="End Game" onAction="#endGameBtnHandler"/>
+      <Button layoutX="246.0" layoutY="500.0" mnemonicParsing="false" text="End Game" onAction="#endGameBtnHandler"/>
    </children>
 </AnchorPane>
 

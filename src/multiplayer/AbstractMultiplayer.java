@@ -22,9 +22,10 @@ abstract class AbstractMultiplayer implements IMultiplayer {
 	protected void setGameName(String gameName) {
 		this.gameName = gameName;
 	}
-	protected void setGameConfiguration(int[] boardSize, int numberOfPlayers) {
+	protected void setGameConfiguration(int[] boardSize, int numberOfPlayers, int tileSize) {
 		this.gameConfiguration.boardSize = boardSize;
 		this.gameConfiguration.numberOfPlayers = numberOfPlayers;
+		this.gameConfiguration.tileSize = tileSize;
 	}
 
 }
