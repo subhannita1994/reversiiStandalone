@@ -19,8 +19,18 @@ abstract class AbstractMultiplayer implements IMultiplayer {
 	public GameConfiguration getGameConfiguration() {
 		return this.gameConfiguration;
 	}
-	public void setPlayers(ArrayList<IPlayer> players) {
+	/**
+	 * the order of entry of players matters,i.e., players[0] is the first player and so on
+	 * also, identifiers are set according to player order
+	 */
+	public void setPlayers(ArrayList<IPlayer> players, GameConfiguration gf) {
 		this.players = players;
+		int i=0;
+		Color[] colors = gf.getIdentifiers();
+		for(IPlayer p : players) {
+			p.setIdentifier(colors[i]);
+			i++;
+		}
 	}
 	public ArrayList<IPlayer> getPlayers() {
 		return this.players;

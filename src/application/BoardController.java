@@ -29,6 +29,18 @@ public class BoardController extends AbstractController implements IController{
 	@FXML
 	public void initialize() {
 		System.out.println("Displaying initial board");
+		/**
+		 * we cannot use any non-static members of Main class here 
+		 * because FXML follows this sequence when it is loaded - 
+		 * 1. initialize the controller
+		 * 2. inject the FXML objects from the xml document to the controller class
+		 * 3. run controller's intialize()
+		 * 4. and finally do other stuff such as calling controller's setMain() method
+		 * 
+		 * Therefore, this.main is null as of now and we have to make use of Main's static gameConfiguration.
+		 * Fortunately, gameConfiguration is same throughout 
+		 * but game may not be same for a different set of players (in case of multiplayer)
+		 */
 		GAME_CONF = Main.getGameConfiguration();
 		
 		for (int i = 0; i < GAME_CONF.getBoardSize()[0]; i++) {
@@ -38,8 +50,7 @@ public class BoardController extends AbstractController implements IController{
 	            Rectangle tile = new Rectangle(GAME_CONF.getTileSize(), GAME_CONF.getTileSize());
 	            tile.setFill(Color.BURLYWOOD);
 	            tile.setStroke(Color.BLACK);
-	            gameBoard.add(tile,j,i);	            
-//	            tile.setOnMouseClicked(event -> drawMove(text));
+	            gameBoard.add(tile,j,i);	
 	            
 	        }
 	    }
@@ -61,6 +72,7 @@ public class BoardController extends AbstractController implements IController{
 			GridPane.setHalignment(c, HPos.CENTER);
 		}
 		
+		//adding future circles to board (places where player 1,i.e., black can click on)
 		
 		
 	}

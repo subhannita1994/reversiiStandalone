@@ -9,4 +9,5 @@ public interface IPlayer {
 	public int getScore();
 	public void setScore(int score);
 	public PlayerType getPlayerType();
+	void setIdentifier(Color identifier);
 }

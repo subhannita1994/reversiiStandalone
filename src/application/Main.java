@@ -4,6 +4,7 @@ import multiplayer.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -69,7 +70,7 @@ public class Main extends Application {
 
 	/**
 	 * this method is called by LaunchController when player clicks on start button (in single player mode for now)
-	 * starts the game in the given mode with these players.
+	 * initializes the game in the given mode with these players.
 	 */
 	public void startGame(Mode mode, HashMap<String,PlayerType> playersInfo) {
 		// if #players returned by launchController != #players allowed by reversii, then quit
@@ -79,25 +80,24 @@ public class Main extends Application {
 			return;
 		}
 		
-		//set players
+		//create players
 		this.game.setMode(mode);
 		ArrayList<IPlayer> players = new ArrayList<IPlayer>();
-		Color[] colors = gf.getIdentifiers();
-		int tmp = 0;
 		for(String playerName : playersInfo.keySet()) {
-			IPlayer p = Factory.getInstance().createPlayer(playerName, colors[tmp], gf.getStartingScore(), playersInfo.get(playerName));
+			IPlayer p = Factory.getInstance().createPlayer(playerName, gf.getStartingScore(), playersInfo.get(playerName));
 			players.add(p);
-			System.out.println("Player created-- Name:"+p.getPlayerName()+" Identifier:"+p.getPlayerIdentifier()+" score:"+p.getScore()+" type:"+p.getPlayerType());
-			tmp++;
+			System.out.println("Player created-- Name:"+p.getPlayerName()+" score:"+p.getScore()+" type:"+p.getPlayerType());
+			
 		}
-		game.setPlayers(players);
-		System.out.println("....players added to game");
 		
-		/**
-		 * TODO:
-		 * decide order of players (should be random)
-		 * 
-		 */
+		//decide order of players
+		Collections.shuffle(players);
+		game.setPlayers(players,gf);
+		System.out.println("....players added to game in the order :");
+		for(IPlayer p : game.getPlayers()) {
+			System.out.println("..."+p.getPlayerName()+":"+p.getPlayerIdentifier());
+		}
+		
 		
 		
 	}

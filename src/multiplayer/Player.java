@@ -4,11 +4,16 @@ import javafx.scene.paint.Color;
 
 class Player extends AbstractPlayer implements IPlayer{
 	
-	public Player(String playerName, Color identifier, int score, PlayerType playerType) {
+	public Player(String playerName, int score, PlayerType playerType) {
 		this.playerName = playerName;
-		this.identifier = identifier;
 		this.score = score;
 		this.playerType = playerType;
+	}
+
+	@Override
+	public void setIdentifier(Color identifier) {
+		// TODO Auto-generated method stub
+		this.identifier = identifier;
 	}
 
 }
