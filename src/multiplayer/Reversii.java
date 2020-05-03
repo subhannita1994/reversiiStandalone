@@ -1,5 +1,7 @@
 package multiplayer;
 
+import javafx.scene.paint.Color;
+
 class Reversii extends AbstractMultiplayer implements IMultiplayer{
 
 	public Mode mode;
@@ -10,7 +12,10 @@ class Reversii extends AbstractMultiplayer implements IMultiplayer{
 		this.setGameName("Reversii");
 		int[] boardSize = new int[2];
 		boardSize[0] = 8;	boardSize[1] = 8;
-		this.setGameConfiguration(boardSize,2,50);
+		Color[] identifiers = new Color[2];
+		identifiers[0] = Color.BLACK;
+		identifiers[1] = Color.WHITE;
+		this.setGameConfiguration(boardSize, 2, 50, 2, identifiers);
 	}
 	
 	/**

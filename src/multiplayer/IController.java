@@ -1,9 +1,9 @@
 package multiplayer;
 
-import javafx.application.Application;
+import application.Main;
 
 public interface IController {
 	
-	public void setMain(Application main);
+	public void setMain(Main main);
 
 }

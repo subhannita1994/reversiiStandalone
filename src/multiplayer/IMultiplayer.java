@@ -1,5 +1,7 @@
 package multiplayer;
 
+import java.util.ArrayList;
+
 public interface IMultiplayer {
 	
 	/**
@@ -7,4 +9,7 @@ public interface IMultiplayer {
 	 */
 	public String getGameName();
 	public GameConfiguration getGameConfiguration();
+	public void setPlayers(ArrayList<IPlayer> players);
+	public ArrayList<IPlayer> getPlayers();
+	public void setMode(Mode mode);
 }

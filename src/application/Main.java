@@ -3,6 +3,9 @@ package application;
 import multiplayer.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -10,42 +13,93 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 
 
 public class Main extends Application {
 	
-	static IMultiplayer game = null;
-	static Stage primaryStage;
+	private IMultiplayer game;
+	private static GameConfiguration gf;
+	private Stage primaryStage;
 	@Override
 	public void start(Stage primaryStage) throws IOException {
+		
+		//initializing game
+		game = Factory.getInstance().getGame("reversii");
+		gf = game.getGameConfiguration();
+		
+		//starting stage
 		this.primaryStage = primaryStage;
 		this.launchXML("LaunchPage.fxml");
 	}
 	
 	public static void main(String[] args) {
-		game = Factory.getInstance().getGame("reversii");
+		
 		launch(args);
 	}
 	
-	public static Stage getStage() {
-		return Main.primaryStage;
-	}
+	
 	
 	public void launchXML(String filename) throws IOException{
+		
 		System.out.println("Loading "+filename);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(filename));
 		Parent root = loader.load();
+		IController controller = loader.getController();
+		controller.setMain(this);
 		primaryStage.setTitle(game.getGameName());
 		Scene scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.setScene(scene);
-		IController controller = loader.getController();
-		controller.setMain(this);
+		
 		primaryStage.show();
 	}
 	
-	public static void quitGame() {
+	public void quitGame() {
 		Platform.exit();
+	}
+	
+	public IMultiplayer getGame() {
+		return this.game;
+	}
+	
+	public static GameConfiguration getGameConfiguration() {
+		return gf;
+	}
+
+	/**
+	 * this method is called by LaunchController when player clicks on start button (in single player mode for now)
+	 * starts the game in the given mode with these players.
+	 */
+	public void startGame(Mode mode, HashMap<String,PlayerType> playersInfo) {
+		// if #players returned by launchController != #players allowed by reversii, then quit
+		if(gf.getNumberOfPlayers() != playersInfo.keySet().size()) {
+			System.out.println("ERROR: incorrect number of players");
+			this.quitGame();
+			return;
+		}
+		
+		//set players
+		this.game.setMode(mode);
+		ArrayList<IPlayer> players = new ArrayList<IPlayer>();
+		Color[] colors = gf.getIdentifiers();
+		int tmp = 0;
+		for(String playerName : playersInfo.keySet()) {
+			IPlayer p = Factory.getInstance().createPlayer(playerName, colors[tmp], gf.getStartingScore(), playersInfo.get(playerName));
+			players.add(p);
+			System.out.println("Player created-- Name:"+p.getPlayerName()+" Identifier:"+p.getPlayerIdentifier()+" score:"+p.getScore()+" type:"+p.getPlayerType());
+			tmp++;
+		}
+		game.setPlayers(players);
+		System.out.println("....players added to game");
+		
+		/**
+		 * TODO:
+		 * decide order of players (should be random)
+		 * 
+		 */
+		
+		
 	}
 	
 }

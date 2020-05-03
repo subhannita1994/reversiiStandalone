@@ -4,11 +4,13 @@ import multiplayer.*;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
@@ -21,9 +23,11 @@ public class LaunchController extends AbstractController implements IController{
 	@FXML Text inviteLink;
 	@FXML ToggleButton findOpponentBtn;
 	@FXML TextField playerName;
+	@FXML RadioButton singlePlayerRadioBtn;
 	
 	public LaunchController() {
 		this.controllerName = "LaunchController";
+		
 	}
 	
 	/**
@@ -76,8 +80,9 @@ public class LaunchController extends AbstractController implements IController{
 	
 	@FXML
 	public void startGameBtnHandler(ActionEvent e) throws IOException{
+		String playerName = this.playerName.getText();
 		ObservableList<String> styleClass = this.playerName.getStyleClass();
-		if(this.playerName.getText().trim().length() == 0) {
+		if(playerName.trim().length() == 0) {
 			System.out.println("player did not enter name");
 			if (! styleClass.contains("error")) {
                 styleClass.add("error");
@@ -86,7 +91,20 @@ public class LaunchController extends AbstractController implements IController{
             // remove all occurrences:
             styleClass.removeAll(Collections.singleton("error"));
             System.out.println("Launching game");
-            ((Main)this.main).launchXML("Board.fxml");
+            Mode mode = null;
+        	HashMap<String, PlayerType> players = new HashMap<String, PlayerType>();
+            if(this.singlePlayerRadioBtn.isSelected()) {
+            	System.out.println("....in single player mode: players are AI and "+playerName);
+            	players.put(playerName, PlayerType.HUMAN);
+            	players.put("Bill", PlayerType.AI);
+            	mode = Mode.SINGLE_PLAYER;
+            }
+            /**
+             * TODO:
+             * else if multiplayer......
+             */
+            this.main.startGame(mode, players);
+            this.main.launchXML("Board.fxml");
         }
 		
 	}

@@ -4,6 +4,7 @@ package application;
 import java.io.IOException;
 import java.util.Optional;
 
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -28,8 +29,7 @@ public class BoardController extends AbstractController implements IController{
 	@FXML
 	public void initialize() {
 		System.out.println("Displaying initial board");
-		
-		GAME_CONF = Main.game.getGameConfiguration();
+		GAME_CONF = Main.getGameConfiguration();
 		
 		for (int i = 0; i < GAME_CONF.getBoardSize()[0]; i++) {
 	        for (int j = 0; j < GAME_CONF.getBoardSize()[1]; j++) {
@@ -44,7 +44,7 @@ public class BoardController extends AbstractController implements IController{
 	        }
 	    }
 		
-		//adding circles to board
+		//adding initial circles to board
 		int circleSize = GAME_CONF.getTileSize()/2 -4;
 		Circle c = new Circle();
 		int[][] tmp = new int[4][2];
@@ -62,6 +62,7 @@ public class BoardController extends AbstractController implements IController{
 		}
 		
 		
+		
 	}
 	
 	
@@ -77,7 +78,7 @@ public class BoardController extends AbstractController implements IController{
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get().equals(yesBtn)) {
 			System.out.println("bye, player");
-			Main.quitGame();
+			this.main.quitGame();
 		}else if(result.get().equals(noBtn)) {
 			System.out.println("...on second thoughts, player wants to continue");
 		}
