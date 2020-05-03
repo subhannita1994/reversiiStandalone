@@ -86,6 +86,7 @@ public class LaunchController extends AbstractController implements IController{
             // remove all occurrences:
             styleClass.removeAll(Collections.singleton("error"));
             System.out.println("Launching game");
+            ((Main)this.main).launchXML("Board.fxml");
         }
 		
 	}
