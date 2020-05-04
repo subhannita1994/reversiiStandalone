@@ -2,7 +2,7 @@ package multiplayer;
 
 import javafx.scene.paint.Color;
 
-class Player extends AbstractPlayer implements IPlayer{
+public class Player extends AbstractPlayer implements IPlayer{
 	
 	public Player(String playerName, int score, PlayerType playerType) {
 		this.playerName = playerName;
