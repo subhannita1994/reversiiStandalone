@@ -14,7 +14,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 
 
 public class Main extends Application {
@@ -22,6 +21,8 @@ public class Main extends Application {
 	private IMultiplayer game;
 	private static GameConfiguration gf;
 	private Stage primaryStage;
+	private IController boardController;
+	
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		
@@ -41,7 +42,7 @@ public class Main extends Application {
 	
 	
 	
-	public void launchXML(String filename) throws IOException{
+	public IController launchXML(String filename) throws IOException{
 		
 		System.out.println("Loading "+filename);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(filename));
@@ -54,15 +55,13 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		
 		primaryStage.show();
+		return controller;
 	}
 	
 	public void quitGame() {
 		Platform.exit();
 	}
 	
-	public IMultiplayer getGame() {
-		return this.game;
-	}
 	
 	public static GameConfiguration getGameConfiguration() {
 		return gf;
@@ -71,6 +70,7 @@ public class Main extends Application {
 	/**
 	 * this method is called by LaunchController when player clicks on start button (in single player mode for now)
 	 * initializes the game in the given mode with these players.
+	 * @throws IOException 
 	 */
 	public void startGame(Mode mode, HashMap<String,PlayerType> playersInfo) {
 		// if #players returned by launchController != #players allowed by reversii, then quit
@@ -98,7 +98,13 @@ public class Main extends Application {
 			System.out.println("..."+p.getPlayerName()+":"+p.getPlayerIdentifier());
 		}
 		
+		//draw the initial board
+		this.boardController.drawBoard(this.game.getBoard());
 		
+	}
+
+	public void setBoardController(IController boardController) {
+		this.boardController = boardController;
 		
 	}
 	

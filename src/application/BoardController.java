@@ -4,14 +4,15 @@ package application;
 import java.io.IOException;
 import java.util.Optional;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -28,7 +29,7 @@ public class BoardController extends AbstractController implements IController{
 	
 	@FXML
 	public void initialize() {
-		System.out.println("Displaying initial board");
+		System.out.println("Displaying game board");
 		/**
 		 * we cannot use any non-static members of Main class here 
 		 * because FXML follows this sequence when it is loaded - 
@@ -50,34 +51,101 @@ public class BoardController extends AbstractController implements IController{
 	            Rectangle tile = new Rectangle(GAME_CONF.getTileSize(), GAME_CONF.getTileSize());
 	            tile.setFill(Color.BURLYWOOD);
 	            tile.setStroke(Color.BLACK);
-	            gameBoard.add(tile,j,i);	
-	            
+	            StackPane stack = new StackPane();
+	            stack.getChildren().add(tile);
+	            gameBoard.add(stack,j,i);
 	        }
 	    }
-		
-		//adding initial circles to board
-		int circleSize = GAME_CONF.getTileSize()/2 -4;
-		Circle c = new Circle();
-		int[][] tmp = new int[4][2];
-		tmp[0][0] = 3;	tmp[0][1] = 3;
-		tmp[1][0] = 4;	tmp[1][1] = 4;
-		tmp[2][0] = 3;	tmp[2][1] = 4;
-		tmp[3][0] = 4;	tmp[3][1] = 3;
-		for(int[] i : tmp) {
-			if(i[0]==i[1])
-				c = new Circle(circleSize, Color.WHITE);
-			else
-				c = new Circle(circleSize, Color.BLACK);
-			gameBoard.add(c, i[0], i[1]);
-			GridPane.setHalignment(c, HPos.CENTER);
+	}
+	
+	public void drawBoard(CellValue[][] board){
+		for(int i =0;i<GAME_CONF.getBoardSize()[0]; i++) {
+			for(int j=0;j<GAME_CONF.getBoardSize()[1];j++) {
+				
+				if(board[i][j].equals(CellValue.BLACK))
+					drawCircle(Color.BLACK, j, i);
+				else if(board[i][j].equals(CellValue.WHITE))
+					drawCircle(Color.WHITE, j, i);
+				else if(board[i][j].equals(CellValue.POSSIBLE)) {
+					//drawing possible circles and adding event handlers to them
+					drawCircle(Color.BURLYWOOD, j, i);
+					StackPane stack = (StackPane) gameBoard.getChildren().get(8*i + j + 1);
+					stack.setOnMouseReleased(event -> {
+						try {
+							handleClick(event);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					});
+					stack.setOnMouseEntered(event -> {
+						try {
+							setCircleStroke(event,3.0);
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+					});
+					stack.setOnMouseExited(event -> {
+						try {
+							setCircleStroke(event,1.0);
+						}catch (IOException e) {
+							e.printStackTrace();
+						}
+					});
+					
+				}else if(board[i][j].equals(CellValue.EMPTY)) {
+					//removing any previous possible  circles
+					StackPane stack = (StackPane) gameBoard.getChildren().get(8*i + j + 1);
+					for(Node n : stack.getChildren())
+						if(n instanceof Circle)
+							stack.getChildren().remove(n);
+				}
+			}
 		}
-		
-		//adding future circles to board (places where player 1,i.e., black can click on)
-		
+	}
+	
+	/**
+	 * draw circle of color on board
+	 */
+	private void drawCircle(Color color, int colIndex, int rowIndex) {
+		int circleSize = GAME_CONF.getTileSize()/2 -4;
+		Circle c = new Circle(circleSize, color);
+		if(color.equals(Color.BURLYWOOD))	//for "possible circles"
+			c.setStroke(Color.DARKGRAY);
+		((StackPane)gameBoard.getChildren().get(rowIndex * GAME_CONF.getBoardSize()[0] + colIndex + 1)).getChildren().add(c);
 		
 	}
 	
-	
+	/**
+	 * handle mouse click event from ONLY "possible circles"
+	 * @param e
+	 * @throws IOException
+	 */
+	private void handleClick(MouseEvent e)throws IOException{
+		StackPane stack = (StackPane)e.getSource();
+		for(Node n : stack.getChildren()) {
+			if(n instanceof Circle) {
+				if(((Circle)n).getFill().equals(Color.BURLYWOOD)) {
+					System.out.println("Player made a move on "+GridPane.getRowIndex(stack)+","+GridPane.getColumnIndex(stack));
+				}
+			}
+		}
+	}
+
+	/**
+	 * animated effects on "possible circle"s
+	 * @param stroke
+	 * @throws IOException
+	 */
+	private void setCircleStroke(MouseEvent e, double value)throws IOException{
+		StackPane stack = (StackPane)e.getSource();
+		for(Node n : stack.getChildren()) {
+			if(n instanceof Circle) {
+				if(((Circle)n).getFill().equals(Color.BURLYWOOD))
+					((Circle)n).setStrokeWidth(value);
+			}
+		}
+	}
+
 	@FXML
 	public void endGameBtnHandler(ActionEvent e) throws IOException{
 		System.out.println("Player wants to quit");

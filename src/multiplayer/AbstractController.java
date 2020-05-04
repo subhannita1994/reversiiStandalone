@@ -16,5 +16,10 @@ public abstract class AbstractController implements IController{
 		this.main = main;
 		System.out.println(this.controllerName +":Main set");
 	}
+	
+	public void drawBoard(CellValue[][] board){
+		
+	}
 
+	
 }

@@ -12,4 +12,6 @@ public interface IMultiplayer {
 	public void setPlayers(ArrayList<IPlayer> players, GameConfiguration gf);
 	public ArrayList<IPlayer> getPlayers();
 	public void setMode(Mode mode);
+	public void setCell(CellValue cellValue, int rowIndex, int colIndex);
+	public CellValue[][] getBoard();
 }

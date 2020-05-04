@@ -38,6 +38,7 @@ abstract class AbstractMultiplayer implements IMultiplayer {
 	public void setMode(Mode mode) {
 		this.mode = mode;
 	}
+	
 	/**
 	 * include protected helper methods here with stuff that is common for all multiplayer games
 	 */
