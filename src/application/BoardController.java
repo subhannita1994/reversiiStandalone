@@ -95,9 +95,10 @@ public class BoardController extends AbstractController implements IController{
 				}else if(board[i][j].equals(CellValue.EMPTY)) {
 					//removing any previous possible  circles
 					StackPane stack = (StackPane) gameBoard.getChildren().get(8*i + j + 1);
-					for(Node n : stack.getChildren())
-						if(n instanceof Circle)
-							stack.getChildren().remove(n);
+					for(int k = 0; k<stack.getChildren().size(); k++) {
+						if(stack.getChildren().get(k) instanceof Circle)
+							stack.getChildren().remove(k);
+					}
 				}
 			}
 		}
@@ -122,12 +123,10 @@ public class BoardController extends AbstractController implements IController{
 	 */
 	private void handleClick(MouseEvent e)throws IOException{
 		StackPane stack = (StackPane)e.getSource();
-		for(Node n : stack.getChildren()) {
-			if(n instanceof Circle) {
-				if(((Circle)n).getFill().equals(Color.BURLYWOOD)) {
-					System.out.println("Player made a move on "+GridPane.getRowIndex(stack)+","+GridPane.getColumnIndex(stack));
-				}
-			}
+		for(int k = 0; k<stack.getChildren().size(); k++) {
+			if(stack.getChildren().get(k) instanceof Circle)
+				if(((Circle)stack.getChildren().get(k)).getFill().equals(Color.BURLYWOOD))
+					this.main.move(GridPane.getRowIndex(stack), GridPane.getColumnIndex(stack));
 		}
 	}
 

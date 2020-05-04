@@ -98,6 +98,7 @@ public class Main extends Application {
 			System.out.println("..."+p.getPlayerName()+":"+p.getPlayerIdentifier());
 		}
 		
+		
 		//draw the initial board
 		this.boardController.drawBoard(this.game.getBoard());
 		
@@ -106,6 +107,15 @@ public class Main extends Application {
 	public void setBoardController(IController boardController) {
 		this.boardController = boardController;
 		
+	}
+	
+	public void move(int rowIndex, int colIndex) {
+		System.out.println(game.getCurrentPlayer().getPlayerName()+" made a move on "+rowIndex+","+colIndex);
+		game.move(rowIndex,colIndex);
+		for(IPlayer player: game.getPlayers()) {
+			System.out.println(player.getPlayerName()+" : "+player.getScore());
+		}
+		this.boardController.drawBoard(this.game.getBoard());
 	}
 	
 }

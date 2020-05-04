@@ -24,5 +24,4 @@ abstract class AbstractPlayer implements IPlayer{
 	public PlayerType getPlayerType() {
 		return this.playerType;
 	}
-
 }

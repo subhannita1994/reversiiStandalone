@@ -10,6 +10,7 @@ abstract class AbstractMultiplayer implements IMultiplayer {
 	private String gameName;
 	protected ArrayList<IPlayer> players;
 	private GameConfiguration gameConfiguration = new GameConfiguration();
+	protected IPlayer currentPlayer;
 	/**
 	 * declare methods that are declared in IMultiplayer here and are common for all games
 	 */
@@ -21,7 +22,8 @@ abstract class AbstractMultiplayer implements IMultiplayer {
 	}
 	/**
 	 * the order of entry of players matters,i.e., players[0] is the first player and so on
-	 * also, identifiers are set according to player order
+	 * identifiers are set according to player order
+	 * the current player is set
 	 */
 	public void setPlayers(ArrayList<IPlayer> players, GameConfiguration gf) {
 		this.players = players;
@@ -31,12 +33,16 @@ abstract class AbstractMultiplayer implements IMultiplayer {
 			p.setIdentifier(colors[i]);
 			i++;
 		}
+		this.currentPlayer = this.players.get(0);
 	}
 	public ArrayList<IPlayer> getPlayers() {
 		return this.players;
 	}
 	public void setMode(Mode mode) {
 		this.mode = mode;
+	}
+	public IPlayer getCurrentPlayer() {
+		return this.currentPlayer;
 	}
 	
 	/**
