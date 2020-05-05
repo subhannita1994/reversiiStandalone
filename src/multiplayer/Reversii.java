@@ -44,6 +44,26 @@ class Reversii extends AbstractMultiplayer implements IMultiplayer{
 	public CellValue[][] getBoard() {
 		return board;
 	}
+	@Override
+	public boolean gameOver() {
+		for(int i=0;i<8;i++) {
+			for(int j=0;j<8;j++) {
+				if(board[i][j].equals(CellValue.POSSIBLE))
+					return false;
+			}
+		}
+		return true;
+	}
+	@Override
+	public IPlayer getWinner() {
+		if(players.get(0).getScore() > players.get(1).getScore())
+			return players.get(0);
+		else if(players.get(1).getScore() > players.get(0).getScore())
+			return players.get(1);
+		else
+			return null;
+	}
+	
 	
 	/**
 	 * game logic:
@@ -98,6 +118,7 @@ class Reversii extends AbstractMultiplayer implements IMultiplayer{
 			}
 			//update score
 			int moveScore = stack.size();
+			System.out.println("Stack size:"+Integer.toString(moveScore));
 			this.currentPlayer.setScore(this.currentPlayer.getScore()+moveScore+1);
 			oppoPlayer.setScore(oppoPlayer.getScore()-moveScore);
 //			System.out.println("Updated scores: "+currentPlayer.getScore()+","+oppoPlayer.getScore());
@@ -105,20 +126,14 @@ class Reversii extends AbstractMultiplayer implements IMultiplayer{
 		
 		ArrayList<Coordinate> positions = new ArrayList<Coordinate>();
 		//remove all possible circles and record opponent player's tiles for the next move
-		for(int i =0;i<7;i++)
-			for(int j=0;j<7;j++) {
+		for(int i =0;i<8;i++)
+			for(int j=0;j<8;j++) {
 				if(board[i][j].equals(CellValue.POSSIBLE))
 					board[i][j] = CellValue.EMPTY;
 				else if(board[i][j].equals(oppoPlayerCellValue))
 					positions.add(new Coordinate(i,j));
 			}
-		
-		//displaying current board
-//		for(int i=0;i<8;i++) {
-//			for(int j=0;j<8;j++)
-//				System.out.print(board[i][j].toString()+"  ");
-//			System.out.println();
-//		}
+	
 		
 		//reconstruct board by iterating for all tiles belonging to opponent player
 		for(Coordinate c1 : positions) {
@@ -155,9 +170,9 @@ class Reversii extends AbstractMultiplayer implements IMultiplayer{
 		//swap players
 		this.currentPlayer = oppoPlayer;
 		
+		
+		
 	}
-	
-	
 	
 	/**
 	 * helper method to return the cellValue of the tile next to pos
@@ -231,7 +246,7 @@ class Reversii extends AbstractMultiplayer implements IMultiplayer{
 		pos.add(new Coordinate(rowIndex-1,colIndex-1,Direction.NW));
 		ArrayList<Coordinate> validPos = new ArrayList<Coordinate>();
 		
-		for(int i=0;i<7;i++) {
+		for(int i=0;i<8;i++) {
 			try {
 				if(this.board[pos.get(i).row][pos.get(i).col].equals(oppoCellValue)) {
 					validPos.add(pos.get(i));

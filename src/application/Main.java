@@ -40,7 +40,10 @@ public class Main extends Application {
 		launch(args);
 	}
 	
-	
+	public void restartGame() throws IOException {
+		game = Factory.getInstance().getGame("reversii");
+		this.launchXML("LaunchPage.fxml");
+	}
 	
 	public IController launchXML(String filename) throws IOException{
 		
@@ -65,6 +68,14 @@ public class Main extends Application {
 	
 	public static GameConfiguration getGameConfiguration() {
 		return gf;
+	}
+	
+	public int[] getScores() {
+		int[] scores = new int[gf.getNumberOfPlayers()];
+		for(int i = 0; i <gf.getNumberOfPlayers(); i++) {
+			scores[i] = game.getPlayers().get(i).getScore();
+		}
+		return scores;
 	}
 
 	/**
@@ -99,9 +110,13 @@ public class Main extends Application {
 		}
 		
 		
-		//draw the initial board
+		//draw the initial board with player names
 		this.boardController.drawBoard(this.game.getBoard());
-		
+		String[] playerNames = new String[gf.getNumberOfPlayers()];
+		for(int i = 0; i<gf.getNumberOfPlayers(); i++) {
+			playerNames[i] = this.game.getPlayers().get(i).getPlayerName();
+		}
+		this.boardController.drawPlayerNames(playerNames);
 	}
 
 	public void setBoardController(IController boardController) {
@@ -109,13 +124,37 @@ public class Main extends Application {
 		
 	}
 	
-	public void move(int rowIndex, int colIndex) {
+	public void move(int rowIndex, int colIndex) throws IOException {
 		System.out.println(game.getCurrentPlayer().getPlayerName()+" made a move on "+rowIndex+","+colIndex);
 		game.move(rowIndex,colIndex);
 		for(IPlayer player: game.getPlayers()) {
 			System.out.println(player.getPlayerName()+" : "+player.getScore());
 		}
 		this.boardController.drawBoard(this.game.getBoard());
+		
+		if(this.game.gameOver()) {
+			IPlayer winner = game.getWinner();
+			this.boardController.declareWinner(winner);
+		}
+	}
+	/**
+	 * display board on console for debugging
+	 */
+	public void displayBoard() {
+		CellValue[][] board = game.getBoard();
+		for(int i = 0; i< gf.getBoardSize()[0]; i++) {
+			for(int j=0;j<gf.getBoardSize()[1]; j++) {
+				if(board[i][j].equals(CellValue.BLACK))
+					System.out.print("B");
+				else if(board[i][j].equals(CellValue.WHITE))
+					System.out.print("W");
+				else if(board[i][j].equals(CellValue.EMPTY))
+					System.out.print("E");
+				else if(board[i][j].equals(CellValue.POSSIBLE))
+					System.out.print("P");
+			}
+			System.out.println();
+		}
 	}
 	
 }

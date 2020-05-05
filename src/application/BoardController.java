@@ -2,14 +2,10 @@ package application;
 
 
 import java.io.IOException;
-import java.util.Optional;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
+import javafx.scene.text.Text;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -21,6 +17,10 @@ import multiplayer.*;
 public class BoardController extends AbstractController implements IController{
 
 	@FXML GridPane gameBoard;
+	@FXML Text playerName1;
+	@FXML Text playerScore1;
+	@FXML Text playerName2;
+	@FXML Text playerScore2;
 	private static GameConfiguration GAME_CONF;
 	
 	public BoardController() {
@@ -56,12 +56,27 @@ public class BoardController extends AbstractController implements IController{
 	            gameBoard.add(stack,j,i);
 	        }
 	    }
+		this.playerNames = new Text[2];
+		this.playerScores = new Text[2];
+		this.playerNames[0] = playerName1;
+		this.playerNames[1] = playerName2;
+		this.playerScores[0] = playerScore1;
+		this.playerScores[1] = playerScore2;
 	}
 	
 	public void drawBoard(CellValue[][] board){
+		
+		this.main.displayBoard();
+		
+		
 		for(int i =0;i<GAME_CONF.getBoardSize()[0]; i++) {
 			for(int j=0;j<GAME_CONF.getBoardSize()[1];j++) {
-				
+				//removing any previous circles
+				StackPane stack = (StackPane) gameBoard.getChildren().get(8*i + j + 1);
+				for(int k = 0; k<stack.getChildren().size(); k++) {
+					if(stack.getChildren().get(k) instanceof Circle)
+						stack.getChildren().remove(k);
+				}
 				if(board[i][j].equals(CellValue.BLACK))
 					drawCircle(Color.BLACK, j, i);
 				else if(board[i][j].equals(CellValue.WHITE))
@@ -69,22 +84,22 @@ public class BoardController extends AbstractController implements IController{
 				else if(board[i][j].equals(CellValue.POSSIBLE)) {
 					//drawing possible circles and adding event handlers to them
 					drawCircle(Color.BURLYWOOD, j, i);
-					StackPane stack = (StackPane) gameBoard.getChildren().get(8*i + j + 1);
-					stack.setOnMouseReleased(event -> {
+					StackPane stackPossible = (StackPane) gameBoard.getChildren().get(8*i + j + 1);
+					stackPossible.setOnMouseReleased(event -> {
 						try {
 							handleClick(event);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 					});
-					stack.setOnMouseEntered(event -> {
+					stackPossible.setOnMouseEntered(event -> {
 						try {
 							setCircleStroke(event,3.0);
 						}catch (IOException e) {
 							e.printStackTrace();
 						}
 					});
-					stack.setOnMouseExited(event -> {
+					stackPossible.setOnMouseExited(event -> {
 						try {
 							setCircleStroke(event,1.0);
 						}catch (IOException e) {
@@ -92,16 +107,13 @@ public class BoardController extends AbstractController implements IController{
 						}
 					});
 					
-				}else if(board[i][j].equals(CellValue.EMPTY)) {
-					//removing any previous possible  circles
-					StackPane stack = (StackPane) gameBoard.getChildren().get(8*i + j + 1);
-					for(int k = 0; k<stack.getChildren().size(); k++) {
-						if(stack.getChildren().get(k) instanceof Circle)
-							stack.getChildren().remove(k);
-					}
 				}
 			}
 		}
+		
+		this.drawPlayerScores();
+		
+		
 	}
 	
 	/**
@@ -145,24 +157,10 @@ public class BoardController extends AbstractController implements IController{
 		}
 	}
 
-	@FXML
-	public void endGameBtnHandler(ActionEvent e) throws IOException{
-		System.out.println("Player wants to quit");
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("End Game");
-		alert.setContentText("Do you really want to quit?");
-		ButtonType yesBtn = new ButtonType("Yes");
-		ButtonType noBtn = new ButtonType("No");
-		alert.getButtonTypes().setAll(yesBtn,noBtn);
-		Optional<ButtonType> result = alert.showAndWait();
-		if(result.get().equals(yesBtn)) {
-			System.out.println("bye, player");
-			this.main.quitGame();
-		}else if(result.get().equals(noBtn)) {
-			System.out.println("...on second thoughts, player wants to continue");
-		}
-		alert.close();
-	}
+	
+	
 
+
+	
 	
 }

@@ -15,4 +15,6 @@ public interface IMultiplayer {
 	public CellValue[][] getBoard();
 	public IPlayer getCurrentPlayer();
 	public void move(int rowIndex, int colIndex);
+	public boolean gameOver();
+	public IPlayer getWinner();
 }

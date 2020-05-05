@@ -2,7 +2,6 @@ package multiplayer;
 
 import java.util.HashMap;
 
-import javafx.scene.paint.Color;
 import multiplayer.IMultiplayer;
 
 public class Factory {

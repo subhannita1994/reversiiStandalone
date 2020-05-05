@@ -44,7 +44,18 @@ abstract class AbstractMultiplayer implements IMultiplayer {
 	public IPlayer getCurrentPlayer() {
 		return this.currentPlayer;
 	}
-	
+	@Override
+	public IPlayer getWinner() {
+		int score = 0;
+		IPlayer winner = null;
+		for(IPlayer player : players) {
+			if(player.getScore() >= score) {
+				score = player.getScore();
+				winner = player;
+			}
+		}
+		return winner;
+	}
 	/**
 	 * include protected helper methods here with stuff that is common for all multiplayer games
 	 */
