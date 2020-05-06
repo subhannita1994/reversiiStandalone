@@ -118,8 +118,8 @@ class Reversii extends AbstractMultiplayer implements IMultiplayer{
 			}
 			//update score
 			int moveScore = stack.size();
-			System.out.println("Stack size:"+Integer.toString(moveScore));
-			this.currentPlayer.setScore(this.currentPlayer.getScore()+moveScore+1);
+			if(moveScore > 0)
+				this.currentPlayer.setScore(this.currentPlayer.getScore()+moveScore+1);
 			oppoPlayer.setScore(oppoPlayer.getScore()-moveScore);
 //			System.out.println("Updated scores: "+currentPlayer.getScore()+","+oppoPlayer.getScore());
 		}
@@ -282,18 +282,5 @@ class Reversii extends AbstractMultiplayer implements IMultiplayer{
 	
 }
 
-class Coordinate{
-	int row;
-	int col;
-	Direction dir;
-	public Coordinate(int row, int col, Direction dir) {
-		this.row = row;	this.col  = col;	this.dir  = dir;
-	}
-	public Coordinate(int row, int col) {
-		this.row =  row;	this.col = col;
-	}
-}
 
-enum Direction{
-	N,NE,E,SE,S,SW,W,NW;
-}
+

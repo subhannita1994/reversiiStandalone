@@ -17,4 +17,5 @@ public interface IMultiplayer {
 	public void move(int rowIndex, int colIndex);
 	public boolean gameOver();
 	public IPlayer getWinner();
+	public Object getMode();
 }

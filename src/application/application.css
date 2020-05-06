@@ -4,3 +4,8 @@
   -fx-text-box-border: red ;
   -fx-focus-color: red ;
 }
+
+.h-box.turn {
+	-fx-background-color: beige ;
+	
+}

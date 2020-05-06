@@ -40,10 +40,7 @@ public class Main extends Application {
 		launch(args);
 	}
 	
-	public void restartGame() throws IOException {
-		game = Factory.getInstance().getGame("reversii");
-		this.launchXML("LaunchPage.fxml");
-	}
+	
 	
 	public IController launchXML(String filename) throws IOException{
 		
@@ -65,6 +62,10 @@ public class Main extends Application {
 		Platform.exit();
 	}
 	
+	public void restartGame() throws IOException {
+		game = Factory.getInstance().getGame("reversii");
+		this.launchXML("LaunchPage.fxml");
+	}
 	
 	public static GameConfiguration getGameConfiguration() {
 		return gf;
@@ -83,7 +84,7 @@ public class Main extends Application {
 	 * initializes the game in the given mode with these players.
 	 * @throws IOException 
 	 */
-	public void startGame(Mode mode, HashMap<String,PlayerType> playersInfo) {
+	public void startGame(Mode mode, HashMap<String,PlayerType> playersInfo) throws IOException {
 		// if #players returned by launchController != #players allowed by reversii, then quit
 		if(gf.getNumberOfPlayers() != playersInfo.keySet().size()) {
 			System.out.println("ERROR: incorrect number of players");
@@ -117,6 +118,10 @@ public class Main extends Application {
 			playerNames[i] = this.game.getPlayers().get(i).getPlayerName();
 		}
 		this.boardController.drawPlayerNames(playerNames);
+		
+		//if singleplayer mode and current player is AI, call AI.move()
+		if(game.getMode().equals(Mode.SINGLE_PLAYER) && game.getCurrentPlayer().getPlayerType().equals(PlayerType.AI))
+			game.getCurrentPlayer().move(this.game.getBoard(), this.boardController);
 	}
 
 	public void setBoardController(IController boardController) {
@@ -124,19 +129,29 @@ public class Main extends Application {
 		
 	}
 	
+	
+	/**
+	 * called by boardController.handleClick() when player clicks on a possible circle
+	 * @param rowIndex
+	 * @param colIndex
+	 * @throws IOException
+	 */
 	public void move(int rowIndex, int colIndex) throws IOException {
 		System.out.println(game.getCurrentPlayer().getPlayerName()+" made a move on "+rowIndex+","+colIndex);
+		//call reversii's move() -- game logic is implemented here
 		game.move(rowIndex,colIndex);
-		for(IPlayer player: game.getPlayers()) {
-			System.out.println(player.getPlayerName()+" : "+player.getScore());
-		}
+		//draw board and player scores
 		this.boardController.drawBoard(this.game.getBoard());
-		
+		//check if game is over
 		if(this.game.gameOver()) {
 			IPlayer winner = game.getWinner();
-			this.boardController.declareWinner(winner);
+			this.boardController.declareWinner(winner.getPlayerName());
 		}
+		//if singleplayer mode and current player is AI, call AI.move()
+		if(game.getMode().equals(Mode.SINGLE_PLAYER) && game.getCurrentPlayer().getPlayerType().equals(PlayerType.AI))
+			game.getCurrentPlayer().move(this.game.getBoard(), this.boardController);
 	}
+	
 	/**
 	 * display board on console for debugging
 	 */
@@ -155,6 +170,15 @@ public class Main extends Application {
 			}
 			System.out.println();
 		}
+	}
+
+	/**
+	 * get the index of the current player
+	 * @return
+	 */
+	public int getCurrentPlayer() {
+		
+		return this.game.getPlayers().indexOf(this.game.getCurrentPlayer());
 	}
 	
 }

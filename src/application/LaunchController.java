@@ -30,6 +30,7 @@ public class LaunchController extends AbstractController implements IController{
 		
 	}
 	
+	
 	/**
 	 * action handler for "instructions" button
 	 * @param e

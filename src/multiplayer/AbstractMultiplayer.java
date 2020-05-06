@@ -20,6 +20,9 @@ abstract class AbstractMultiplayer implements IMultiplayer {
 	public GameConfiguration getGameConfiguration() {
 		return this.gameConfiguration;
 	}
+	public Mode getMode() {
+		return this.mode;
+	}
 	/**
 	 * the order of entry of players matters,i.e., players[0] is the first player and so on
 	 * identifiers are set according to player order
