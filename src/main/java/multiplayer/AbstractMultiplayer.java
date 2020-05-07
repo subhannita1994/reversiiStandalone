@@ -1,4 +1,4 @@
-package multiplayer;
+package main.java.multiplayer;
 
 import java.util.ArrayList;
 

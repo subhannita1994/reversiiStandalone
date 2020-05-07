@@ -1,9 +1,9 @@
-package application;
+package main.java.application;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.scene.paint.Color;
-import multiplayer.*;
+import main.java.multiplayer.*;
 /**
  * strategy : assign fitness value to each cell
  * make a move on the cell with best fitness

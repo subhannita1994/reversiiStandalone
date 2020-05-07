@@ -1,8 +1,8 @@
-package multiplayer;
+package main.java.multiplayer;
 
 
-import application.AI;
-import multiplayer.IMultiplayer;
+import main.java.application.AI;
+import main.java.multiplayer.IMultiplayer;
 
 public class Factory {
 	

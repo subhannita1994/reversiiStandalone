@@ -1,4 +1,4 @@
-package multiplayer;
+package main.java.multiplayer;
 
 
 public class Player extends AbstractPlayer implements IPlayer{

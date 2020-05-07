@@ -1,6 +1,6 @@
-package application;
+package main.java.application;
 
-import multiplayer.*;
+import main.java.multiplayer.*;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,9 +1,9 @@
-package multiplayer;
+package main.java.multiplayer;
 
 
 import java.io.IOException;
 
-import application.Main;
+import main.java.application.Main;
 import javafx.event.ActionEvent;
 
 public interface IController {

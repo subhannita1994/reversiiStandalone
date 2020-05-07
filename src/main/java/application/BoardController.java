@@ -1,4 +1,4 @@
-package application;
+package main.java.application;
 
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import multiplayer.*;
+import main.java.multiplayer.*;
 
 public class BoardController extends AbstractController implements IController{
 

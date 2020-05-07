@@ -1,10 +1,10 @@
-package multiplayer;
+package main.java.multiplayer;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
 
-import application.Main;
+import main.java.application.Main;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
