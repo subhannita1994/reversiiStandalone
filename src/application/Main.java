@@ -145,11 +145,16 @@ public class Main extends Application {
 		//check if game is over
 		if(this.game.gameOver()) {
 			IPlayer winner = game.getWinner();
-			this.boardController.declareWinner(winner.getPlayerName());
-		}
+			try {
+				this.boardController.declareWinner(winner.getPlayerName());
+			}catch(NullPointerException e) {
+				this.boardController.declareWinner("both player");
+			}
+		}else {
 		//if singleplayer mode and current player is AI, call AI.move()
 		if(game.getMode().equals(Mode.SINGLE_PLAYER) && game.getCurrentPlayer().getPlayerType().equals(PlayerType.AI))
 			game.getCurrentPlayer().move(this.game.getBoard(), this.boardController);
+		}
 	}
 	
 	/**

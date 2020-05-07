@@ -89,9 +89,10 @@ public class AI extends AbstractPlayer implements IPlayer{
 				bestMove = c;
 			}
 		}
-		
-		System.out.println("best move:"+bestMove.getRow()+","+bestMove.getCol());
-		boardController.handleClickAI(bestMove.getRow(), bestMove.getCol());
+		if(bestMove!=null) {
+			System.out.println("best move:"+bestMove.getRow()+","+bestMove.getCol());
+			boardController.handleClickAI(bestMove.getRow(), bestMove.getCol());
+		}
 	}
 	
 	private Coordinate nextPos(Coordinate pos1, Coordinate pos2) {
